@@ -1,0 +1,26 @@
+const { chromium } = require('playwright'); const fs=require('fs');
+(async()=>{
+ const b=await chromium.launch(); const p=await b.newPage({viewport:{width:1440,height:900}});
+ const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+ await p.goto('file://'+process.cwd()+'/dist/index.html'); await p.waitForTimeout(400);
+ await p.getByRole('radio',{name:'Access management'}).click(); await p.waitForTimeout(400);
+ await p.screenshot({path:'a-list.png',fullPage:true});
+ const axe=fs.readFileSync('node_modules/axe-core/axe.min.js','utf8'); await p.evaluate(axe);
+ let r=await p.evaluate(()=>axe.run(document,{runOnly:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']})); console.log('axe list',r.violations.map(v=>v.id+' '+v.nodes[0].html.slice(0,100)));
+ await p.getByRole('button',{name:'Invite user'}).click(); await p.waitForTimeout(300);
+ await p.getByRole('button',{name:'Send invitation',exact:true}).click(); await p.waitForTimeout(200);
+ await p.screenshot({path:'a-invite-err.png'});
+ r=await p.evaluate(()=>axe.run(document,{runOnly:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']})); console.log('axe invite',r.violations.map(v=>v.id+' '+v.nodes[0].html.slice(0,100)));
+ await p.getByLabel('Email address').fill('new.person@dgpc.gouv.ht');
+ await p.getByRole('button',{name:'Select an organization Organization'}).click(); await p.getByRole('option',{name:'DGPC Haiti'}).click();
+ await p.getByRole('button',{name:'Select a role Role'}).click(); await p.getByRole('option',{name:'Data collector'}).click();
+ await p.screenshot({path:'a-invite.png'});
+ await p.getByRole('button',{name:'Send invitation',exact:true}).click(); await p.waitForTimeout(400);
+ await p.waitForTimeout(300); console.log('toast:', await p.locator('.toast').first().textContent()); await p.waitForTimeout(4500); console.log('toasts after 4.8s:', await p.locator('.toast').count());
+ await p.getByRole('button',{name:'Delete Marie Joseph'}).click(); await p.waitForTimeout(300);
+ await p.screenshot({path:'a-delete.png'});
+ await p.getByRole('button',{name:'Delete user',exact:true}).click(); await p.waitForTimeout(400);
+ await p.getByRole('button',{name:'Next page'}).click(); await p.waitForTimeout(200);
+ console.log('rows p2:', await p.locator('tbody tr').count(), await p.getByText(/Page \d of \d/).textContent());
+ console.log(errs); await b.close();
+})();

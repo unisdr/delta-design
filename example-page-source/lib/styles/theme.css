@@ -1,0 +1,88 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "./tokens.css";
+
+/* DELTA Tailwind theme (one-time setup).
+   For colour, spacing, radius, shadow, font size and font weight, only the values below exist.
+   Tailwind's own defaults for these are switched off with `initial`.
+   Anything not listed here (z-index, opacity, ...) keeps Tailwind's default until the design system defines it. */
+@theme {
+  --color-*: initial;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-inset: var(--inset);
+  --color-overlay: var(--overlay);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-control: var(--control-border);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-fg-inverse: var(--fg-inverse);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+  --color-accent-disabled: var(--accent-disabled);
+  --color-accent-100: var(--accent-100);
+  --color-good: var(--good);
+  --color-good-bg: var(--good-bg);
+  --color-good-border: var(--good-border);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-border: var(--warn-border);
+  --color-crit: var(--crit);
+  --color-crit-hover: var(--crit-hover);
+  --color-crit-bg: var(--crit-bg);
+  --color-crit-border: var(--crit-border);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-info-border: var(--info-border);
+  --color-toast: var(--toast-bg);
+  --color-transparent: transparent;
+
+  --spacing-*: initial;
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+
+  --radius-*: initial;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  --shadow-*: initial;
+  --shadow-sm: 0 1px 2px rgba(17,24,41,0.06);
+  --shadow-md: 0 4px 12px rgba(17,24,41,0.10);
+  --shadow-lg: 0 8px 24px rgba(17,24,41,0.14);
+
+  --text-*: initial;
+  --text-caption: 11px;
+  --text-label: 12px;
+  --text-body: 14px;
+  --text-section: 16px;
+  --text-page: 20px;
+  --text-data-large: 24px;
+
+  --font-weight-*: initial;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  --font-sans: var(--font);
+  --font-mono: var(--mono);
+}
+
+@layer base {
+  html { font-family: var(--font); font-size: 14px; line-height: 1.5; color: var(--fg); background: var(--bg); }
+  *:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+}

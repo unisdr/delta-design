@@ -1,0 +1,12 @@
+const { chromium } = require('playwright'); const fs=require('fs');
+const T=['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa'];
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1440,height:900}});
+const errs=[];p.on('pageerror',e=>errs.push(e.message));
+const axe=fs.readFileSync('node_modules/axe-core/axe.min.js','utf8');
+await p.goto('file://'+process.cwd()+'/dist/index.html');await p.waitForTimeout(400);
+await p.getByRole('radio',{name:'Geographic levels',exact:true}).click();await p.waitForTimeout(350);
+await p.getByRole('button',{name:'Edit Haiti'}).click();await p.waitForTimeout(300);await p.screenshot({path:'c-geo4.png'});
+await p.evaluate(axe);const r=await p.evaluate((T)=>axe.run(document,{runOnly:T}),T);console.log('axe',r.violations.map(v=>v.id+' '+v.nodes[0].html.slice(0,140)));
+await p.getByText('This is the whole country').click();await p.getByRole('button',{name:'Save changes'}).click();await p.waitForTimeout(300);
+console.log('labels', await p.locator('.tl-row').first().textContent(), '|', await p.locator('.tl-row').nth(1).textContent());
+console.log(errs);await b.close();})();

@@ -1,0 +1,26 @@
+const { chromium } = require('playwright'); const fs=require('fs');
+const T=['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa'];
+(async()=>{
+ const b=await chromium.launch(); const p=await b.newPage({viewport:{width:1440,height:900}});
+ const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+ const axe=fs.readFileSync('node_modules/axe-core/axe.min.js','utf8');
+ const ax=async(n)=>{await p.evaluate(axe);const r=await p.evaluate((T)=>axe.run(document,{runOnly:T}),T);console.log(n,'axe',r.violations.map(v=>v.id+' '+v.nodes[0].html.slice(0,90)));};
+ await p.goto('file://'+process.cwd()+'/dist/index.html'); await p.waitForTimeout(400);
+ await p.getByRole('radio',{name:'Organizations'}).click(); await p.waitForTimeout(300);
+ await p.screenshot({path:'o1.png'}); await ax('page');
+ await p.getByRole('button',{name:'Add organization'}).click(); await p.waitForTimeout(200);
+ await p.getByRole('dialog').getByRole('button',{name:'Add organization'}).click(); await p.waitForTimeout(150);
+ await p.getByRole('textbox',{name:'Name',exact:true}).fill('dgpc haiti'); await p.getByRole('dialog').getByRole('button',{name:'Add organization'}).click(); await p.waitForTimeout(200);
+ await p.screenshot({path:'o2.png'}); await ax('add dialog');
+ await p.getByRole('textbox',{name:'Name',exact:true}).fill('Airport Authority'); await p.getByRole('dialog').getByRole('button',{name:'Add organization'}).click(); await p.waitForTimeout(300);
+ console.log('added', await p.getByRole('rowheader',{name:'Airport Authority'}).count());
+ await p.getByRole('button',{name:'Delete DGPC Haiti'}).click(); await p.waitForTimeout(300); await p.screenshot({path:'o3.png'}); await ax('blocked dialog');
+ await p.getByRole('alertdialog').getByRole('button',{name:'Close'}).last().click(); await p.waitForTimeout(300);
+ await p.getByRole('button',{name:'Delete Airport Authority'}).click(); await p.waitForTimeout(300); await p.screenshot({path:'o4.png'});
+ await p.getByRole('button',{name:'Delete organization'}).click(); await p.waitForTimeout(300);
+ console.log('deleted', await p.getByRole('rowheader',{name:'Airport Authority'}).count());
+ await p.getByRole('searchbox').fill('zzz'); await p.waitForTimeout(200); await p.screenshot({path:'o5.png'});
+ const m=await b.newPage({viewport:{width:390,height:800}}); await m.goto('file://'+process.cwd()+'/dist/index.html'); await m.getByRole('radio',{name:'Organizations'}).click(); await m.waitForTimeout(300);
+ console.log('mobile scrollW', await m.evaluate(()=>document.documentElement.scrollWidth)); await m.screenshot({path:'o6.png'});
+ console.log(errs); await b.close();
+})();
