@@ -2,7 +2,7 @@
 
 Design rules for anyone building DELTA UI, human or AI-assisted ("vibe coding"). Read this before writing UI code. The code standards are in [AGENTS.md](AGENTS.md); this file covers the visual and interaction side only.
 
-Status: draft v0.7.2, written from `tokens.json` v0.7.2. Owner: the DELTA design lead (UNDRR, IDTS unit). No items are pending; the earlier proposals were agreed on 2026-11-09, the added components on 2026-11-10, WCAG 2.2 on 2026-11-11 and the table, pagination and tree list rules on 2026-11-12.
+Status: draft v0.7.3, written from `tokens.json` v0.7.3. Owner: the DELTA design lead (UNDRR, IDTS unit). No items are pending; the earlier proposals were agreed on 2026-11-09, the added components on 2026-11-10, WCAG 2.2 on 2026-11-11 and the table, pagination and tree list rules on 2026-11-12.
 
 ## Source of truth
 

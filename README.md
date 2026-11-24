@@ -2,7 +2,7 @@
 
 The DELTA design system: design tokens, guidelines and a working example page built with React Aria and Tailwind. It is the source of truth for how DELTA looks and behaves. Where Figma disagrees with DESIGN.md or tokens.json, DESIGN.md and tokens.json win.
 
-Version 0.7.2, 12 November 2026.
+Version 0.7.3, 12 November 2026.
 
 ## What is in this repo
 
